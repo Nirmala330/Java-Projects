@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Student Management System</title>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+	
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+  <!-- Brand -->
+  <a class="navbar-brand" href="#">Student Management System</a>
+
+  <!-- Toggler/collapsibe Button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Navbar links -->
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/}">Student Management</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" th:href="@{/}">Teacher Management</a>
+      </li>
+      
+       <li class="nav-item">
+        <a class="nav-link" th:href="@{/login}">Login</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link" th:href="@{/registration}">Register</a>
+      </li>
+      
+       <li class="nav-item">
+        <a class="nav-link" th:href="@{/login}">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+	<div class ="container">
+		<div class = "row">
+			<h1> List Students </h1>
+		</div>
+
+		<div class = "row">
+			<div class = "col-lg-3">
+				<a th:href = "@{/students/new}" class = "btn btn-primary btn-sm mb-3"> Add Student</a>
+			</div>
+		</div>
+		<table class = "table table-striped table-bordered">
+			<thead class = "table-dark">
+				<tr>
+				    <th scope = "col"> Student Profile Image</th>
+					<th scope = "col">
+						<a th:href="@{'/page/' + ${currentPage} + '?sortField=firstName&sortDirection=' + ${reverseSortDirection}}">Student First Name</a>
+					 </th>
+					<th scope = "col"> 
+						<a th:href="@{'/page/' + ${currentPage} + '?sortField=lastName&sortDirection=' + ${reverseSortDirection}}">Student Last Name</a>
+					</th>
+					<th scope = "col"> Student Email </th>
+					<th scope = "col"> Actions </th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr th:each = "student: ${students}">
+					<td>
+						<img th:src="@{'/image?id='+ ${student.id}}" class="rounded mx-auto d-block" width="100" height="100">
+						<a th:href="@{'/downloadfile?id=' + ${student.id}}"><i class="fa fa-download"></i></a>
+					</td>
+					<td th:text = "${student.firstName}"></td>
+					<td th:text = "${student.lastName}"></td>
+					<td th:text = "${student.email}"></td>
+					<td>
+						<a th:href = "@{/students/edit/{id}(id=${student.id})}"
+						 class = "btn btn-primary">Update</a>
+						 
+						 <a th:href = "@{/students/view/{id}(id=${student.id})}"
+						 class = "btn btn-primary">View</a>
+
+						<a th:href = "@{/students/{id}(id=${student.id})}"
+						 class = "btn btn-danger">Delete</a>
+
+					</td>
+				</tr>
+			</tbody>
+
+		</table>
+		Total Items: [[${totalItems}]] - Page [[${currentPage}]] of [[${totalPages}]]
+		&nbsp; - &nbsp;
+		
+		<a th:if = "${currentPage > 1}" th:href= "@{'/page/1' + '?sortField=' + ${sortField} + '&sortDirection=' +${sortDirection}}">First</a>
+		<span th:unless = "${currentPage > 1}">First</span>
+		&nbsp;&nbsp;
+		
+		<a th:if = "${currentPage > 1}" th:href= "@{'/page/' + ${currentPage -1} + '?sortField=' + ${sortField} + '&sortDirection=' +${sortDirection}}">Previous</a>
+		<span th:unless = "${currentPage > 1}">Previous</span>
+		&nbsp;&nbsp;
+		
+		<span th:each = "i: ${#numbers.sequence(1,totalPages)}">
+			<a th:if = "${i != currentPage }" th:href = "@{'/page/' +${i}} + '?sortField=' + ${sortField} + '&sortDirection=' +${sortDirection} ">[[${i}]]</a>&nbsp;&nbsp;
+			<span th:unless = "${i != currentPage }" th:href = "@{'/page/' +${i}}">[[${i}]]</span>&nbsp;&nbsp;
+		</span>
+		
+		<a th:if = "${currentPage < totalPages}" th:href= "@{'/page/' + ${currentPage + 1} + '?sortField=' + ${sortField} + '&sortDirection=' +${sortDirection} }">Next</a>
+		<span th:unless = "${currentPage < totalPages}">Next</span>
+		&nbsp;&nbsp;
+		
+		<a th:if = "${currentPage < totalPages}" th:href= "@{'/page/' + ${totalPages} + '?sortField=' + ${sortField} + '&sortDirection=' +${sortDirection}}">Last</a>
+		<span th:unless = "${currentPage < totalPages}">Last</span>
+		
+
+	</div>
+	
+<!-- JavaScript Bundle with Popper -->
+<script
+ src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+ integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+ crossorigin="anonymous"></script>
+ 
+ 
+</body>
+</html>
